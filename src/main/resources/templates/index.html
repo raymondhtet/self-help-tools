@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Self Help Tools</title>
+    <!--Import Google Icon Font-->
+    <link href="css/icon.css" rel="stylesheet"/>
+    <!--Import materialize.css-->
+    <link
+            type="text/css"
+            rel="stylesheet"
+            href="css/materialize.min.css"
+            media="screen,projection"
+    />
+</head>
+<body>
+<div class="container">
+    <form th:action="@{/decrypt/jwe}" method="post" id="form-decrypt-jwe">
+
+        <h1>Decrypt JWE</h1>
+
+        <!-- Pretty Textarea with Button -->
+        <div class="row">
+            <div class="input-field col s6">
+                <textarea id="jwe" class="materialize-textarea"></textarea>
+                <label for="jwe">Encrypted JWT (JWE)</label>
+            </div>
+            <div class="col s6">
+                <a class="waves-effect waves-light btn" id="decrypt-button">Decrypt</a>
+            </div>
+        </div>
+
+        <!-- Readonly Textarea -->
+        <div class="row">
+            <div class="col s6">
+                            <textarea id="decrypted-jwt" class="materialize-textarea" readonly
+                                      placeholder="Decrypted content will be displayed here">
+
+                            </textarea>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<!--JavaScript at end of body for optimized loading-->
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    $(document).ready(function (){
+        $("#decrypt-button").click(function (e) {
+            e.preventDefault();
+
+            var form = $('#form-decrypt-jwe');
+            var encryptedJWT = $("#jwe").val();
+            console.log('form serialized', encryptedJWT);
+            $.ajax({
+                url: form.attr('action'),
+                data: {encryptedJWT: encryptedJWT},
+                type: "POST",
+                success: function(result) {
+                    console.log('result', result);
+                    // Do something with the response.
+                    // Might want to check for errors here.
+                }, error: function(error) {
+                    console.error(error);
+                    // Here you can handle exceptions thrown by the server or your controller.
+                }
+            })
+        });
+    });
+</script>
+</body>
+</html>
